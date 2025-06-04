@@ -38,7 +38,7 @@ function App() {
 
   return (
     <>
-      <LineChart width={600} height={300} data={csvData}>
+      <LineChart width={1000} height={700} data={csvData}>
         {latitude && (
           <Line type="monotone" dataKey="latitude" stroke="#ff9933" />
         )}
