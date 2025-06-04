@@ -33,19 +33,6 @@ const data = [
   },
 ];
 
-const renderLineChart = (
-  <LineChart width={600} height={300} data={data}>
-    {/* <Line type="monotone" dataKey="time" stroke="#8884d8" /> */}
-    <Line type="monotone" dataKey="latitude" stroke="#eab676" />
-    <Line type="monotone" dataKey="longitude" stroke="#eab676" />
-    <Line type="monotone" dataKey="depth" stroke="#eab676" />
-
-    <CartesianGrid stroke="#ccc" />
-    <XAxis />
-    <YAxis />
-    <Tooltip />
-  </LineChart>
-);
 
 function App() {
   const [count, setCount] = useState(0);
