@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useState } from "react";
 import Papa from "papaparse";
 import "./App.css";
 import {
@@ -12,55 +10,57 @@ import {
   Tooltip,
 } from "recharts";
 
-const data = [
-  {
-    time: "2025-06-03T14:00:14.590Z",
-    latitude: 38.76966476,
-    longitude: -122.737999,
-    depth: 0.980000019,
-  },
-  {
-    time: "2025-06-03T14:00:10.863Z",
-    latitude: 63.0255,
-    longitude: -150.6247,
-    depth: 108.9,
-  },
-  {
-    time: "2025-06-03T13:54:48.820Z",
-    latitude: 38.82249832,
-    longitude: -122.8424988,
-    depth: 2.269999981,
-  },
-];
-
-
 function App() {
-  const [count, setCount] = useState(0);
+  const [csvData, setCsvData] = useState<any[]>([]);
   const [latitude, setLatitude] = useState(true);
   const [longitude, setLongitude] = useState(true);
   const [depth, setDepth] = useState(true);
 
+  useEffect(() => {
+    Papa.parse("/all_month.csv", {
+      header: true,
+      dynamicTyping: true,
+      download: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const parsedData = results.data as any[];
+        const transformedData = parsedData.map((row) => ({
+          ...row,
+          time: new Date(row.time).toISOString(), // ensure valid time formatting
+        }));
+        setCsvData(transformedData);
+      },
+      error: (error) => {
+        console.error("CSV fetch error:", error);
+      },
+    });
+  }, []);
+
   return (
     <>
-      <LineChart width={600} height={300} data={data}>
-
-        {latitude && <Line type="monotone" dataKey="latitude" stroke="#ff9933" />}
-        {longitude && <Line type="monotone" dataKey="longitude" stroke="#ff3333" />}
-        {depth && <Line type="monotone" dataKey="depth" stroke="#3399ff" /> }
+      <LineChart width={600} height={300} data={csvData}>
+        {latitude && (
+          <Line type="monotone" dataKey="latitude" stroke="#ff9933" />
+        )}
+        {longitude && (
+          <Line type="monotone" dataKey="longitude" stroke="#ff3333" />
+        )}
+        {depth && <Line type="monotone" dataKey="depth" stroke="#3399ff" />}
 
         <CartesianGrid stroke="#ccc" />
-        <XAxis />
+        <XAxis dataKey="time" />
         <YAxis />
         <Tooltip />
       </LineChart>
 
       <div>Earthquake data</div>
+
       <label>
         <input
           type="checkbox"
           onChange={() => setLatitude(!latitude)}
           checked={latitude}
-        ></input>
+        />
         Latitude
       </label>
 
@@ -69,7 +69,7 @@ function App() {
           type="checkbox"
           onChange={() => setLongitude(!longitude)}
           checked={longitude}
-        ></input>
+        />
         Longitude
       </label>
 
@@ -78,7 +78,7 @@ function App() {
           type="checkbox"
           onChange={() => setDepth(!depth)}
           checked={depth}
-        ></input>
+        />
         Depth
       </label>
     </>
