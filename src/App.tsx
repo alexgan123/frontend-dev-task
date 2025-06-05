@@ -36,6 +36,7 @@ function App() {
     });
   }, []);
 
+  console.log(csvData);
   return (
     <>
       <LineChart width={1000} height={700} data={csvData}>
@@ -81,6 +82,25 @@ function App() {
         />
         Depth
       </label>
+
+      <table>
+        <tr>
+          <th>time</th>
+          <th>latitude</th>
+          <th>longitude</th>
+          <th>depth</th>
+        </tr>
+        {csvData.map((data) => {
+          return (
+            <tr>
+              <td>{data.time}</td>
+              <td>{data.latitude}</td>
+              <td>{data.longitude}</td>
+              <td>{data.depth}</td>
+            </tr>
+          );
+        })}
+      </table>
     </>
   );
 }
