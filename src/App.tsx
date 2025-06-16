@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  Brush,
 } from "recharts";
 
 function App() {
@@ -52,6 +53,14 @@ function App() {
         <XAxis dataKey="time" />
         <YAxis />
         <Tooltip />
+
+        <Brush
+          dataKey="time"
+          height={30}
+          stroke="#8884d8"
+          startIndex={0}
+          endIndex={Math.min(100, csvData.length - 1)} // Shows first 100 points by default
+        />
       </LineChart>
 
       <div>Earthquake data</div>
